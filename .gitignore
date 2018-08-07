@@ -1,3 +1,6 @@
+# ----- Test Directory Ignores -----
+tests/
+
 # ----- JetBrains Ignores -----
 .idea/
 

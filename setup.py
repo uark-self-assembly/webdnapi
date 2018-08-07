@@ -8,5 +8,6 @@ setup(
     license='MIT',
     author='UARK Self Assembly Lab',
     author_email='ddarling29@gmail.com',
-    description='A Python API for writing analysis scripts to be used with WebDNA '
+    description='A Python API for writing analysis scripts to be used with WebDNA ',
+    install_requires=['jsonpickle']
 )
