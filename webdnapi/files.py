@@ -19,6 +19,7 @@ class ProjectSettings:
         self.script_chain = dictionary['script_chain']
         self.execution_time = dictionary['execution_time']
 
+
 def load_input():
     input_settings = {}
     with open('input.txt', 'r') as input:
@@ -29,3 +30,8 @@ def load_input():
     return input_settings
 
 
+def load_log():
+    with open('log.dat', 'r') as log:
+        file_string = log.read()
+
+    return file_string
