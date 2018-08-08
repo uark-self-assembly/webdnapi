@@ -1,6 +1,14 @@
 import jsonpickle
 from webdnapi import utils
 
+class ProjectSettings:
+    def __init__(self, dictionary, file_string):
+        self.file_string = file_string
+        self.name = dictionary.get('name', None)
+        self.generation = utils.Generation(dictionary=dictionary['generation'])
+        self.script_chain = dictionary['script_chain']
+        self.execution_time = dictionary['execution_time']
+
 
 def load_project_settings():
     with open('project.json', 'r') as settings:
@@ -9,15 +17,6 @@ def load_project_settings():
     loaded = jsonpickle.decode(file_string)
     project_settings = ProjectSettings(dictionary=loaded, file_string=file_string)
     return project_settings
-
-
-class ProjectSettings:
-    def __init__(self, dictionary, file_string):
-        self.file_string = file_string
-        self.name = dictionary.get('name', None)
-        self.generation = utils.Generation(dictionary=dictionary['generation'])
-        self.script_chain = dictionary['script_chain']
-        self.execution_time = dictionary['execution_time']
 
 
 def load_input():
@@ -35,3 +34,17 @@ def load_log():
         file_string = log.read()
 
     return file_string
+
+
+class StdOut:
+    def __init__(self, file_string):
+        self.file_string = file_string
+        self.steps = file_string.splitlines()
+
+
+def load_stdout():
+    with open('stdout.log', 'r') as stdout:
+        file_string = stdout.read()
+
+    output_file = StdOut(file_string)
+    return output_file
