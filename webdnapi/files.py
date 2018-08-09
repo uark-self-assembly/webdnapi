@@ -85,3 +85,18 @@ def load_topology():
     nucleotides.pop(0)
     loaded = Topology(file_string, nucleotide_count, strand_count, nucleotides)
     return loaded
+
+
+class Energy:
+    def __init__(self, file_string, time_steps):
+        self.file_string = file_string
+        self.time_steps = time_steps
+
+
+def load_energy():
+    with open('energy.dat', 'r') as energy:
+        file_string = energy.read()
+
+    time_steps = file_string.splitlines()
+    loaded = Energy(file_string, time_steps)
+    return loaded
