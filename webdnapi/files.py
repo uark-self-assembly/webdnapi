@@ -1,6 +1,7 @@
 import jsonpickle
 from webdnapi import utils
 
+
 class ProjectSettings:
     def __init__(self, dictionary, file_string):
         self.file_string = file_string
@@ -48,3 +49,17 @@ def load_stdout():
 
     output_file = StdOut(file_string)
     return output_file
+
+
+class Sequence:
+    def __init__(self, file_string):
+        self.file_string = file_string
+        self.strands = file_string.splitlines()
+
+
+def load_sequence():
+    with open('sequence.txt', 'r') as sequence:
+        file_string = sequence.read()
+
+    loaded = Sequence(file_string)
+    return loaded
