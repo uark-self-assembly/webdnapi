@@ -7,7 +7,7 @@ setup(
     url='https://github.com/uark-self-assembly/webdnapi',
     license='MIT',
     author='UARK Self Assembly Lab',
-    author_email='ddarling29@gmail.com',
+    author_email='webdna.user@gmail.com',
     description='A Python API for writing analysis scripts to be used with WebDNA ',
     install_requires=['jsonpickle']
 )
