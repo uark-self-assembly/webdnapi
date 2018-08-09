@@ -100,3 +100,34 @@ def load_energy():
     time_steps = file_string.splitlines()
     loaded = Energy(file_string, time_steps)
     return loaded
+
+
+class ExternalForces:
+    def __init__(self, file_string, forces):
+        self.file_string = file_string
+        self.forces = forces
+
+
+def load_external_forces():
+    with open('external_forces.dat', 'r') as ext_forces:
+        file_string = ext_forces.read()
+
+    lines = file_string.splitlines()
+    forces = []
+
+    i = 0
+    while i < len(lines):
+        if lines[i] == '{':
+            new_force = utils.Force()
+            for j in range(i+1, len(lines), 1):
+                if lines[j] == '}':
+                    i = j
+                    break
+                attribute = lines[j].split(' = ')[0]
+                value = lines[j].split(' = ')[1]
+                new_force.attributes[attribute] = value
+            forces.append(new_force)
+        i += 1
+
+    loaded = ExternalForces(file_string, forces)
+    return loaded

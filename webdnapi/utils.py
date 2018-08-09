@@ -32,3 +32,10 @@ class Generation:
         self.arguments = dictionary['arguments']
 
 
+class Force:
+    def __init__(self, force_type=None, dictionary=None):
+        self.force_type = force_type
+        if dictionary is None:
+            self.attributes = {}
+        else:
+            self.attributes = dictionary
