@@ -63,3 +63,25 @@ def load_sequence():
 
     loaded = Sequence(file_string)
     return loaded
+
+
+class Topology:
+    def __init__(self, file_string, nucleotide_count, strand_count, nucleotides):
+        self.file_string = file_string
+        self.nucleotide_count = nucleotide_count
+        self.strand_count = strand_count
+        self.nucleotides = nucleotides
+
+
+def load_topology():
+    with open('generated.top', 'r') as top:
+        first_line = top.readline()
+        top.seek(0)
+        file_string = top.read()
+
+    nucleotide_count = int(first_line.split()[0])
+    strand_count = int(first_line.split()[1])
+    nucleotides = file_string.splitlines()
+    nucleotides.pop(0)
+    loaded = Topology(file_string, nucleotide_count, strand_count, nucleotides)
+    return loaded
