@@ -2,7 +2,7 @@
 A Python API for writing analysis scripts to be used with WebDNA
 
 ### Usage
-Using the API is simple, simply import webdnapi.files to expose the file loading functionality
+Using the API is simple, just import webdnapi.files to expose the file loading functionality
 
 ##### Project Settings:
 Project settings are stored on a single JSON file
