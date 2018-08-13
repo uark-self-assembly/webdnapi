@@ -150,38 +150,15 @@ class Trajectory:
 
 
 def load_trajectory_initial():
-    with open(os.path.join('..', 'generated.dat'), 'r') as traj:
-        time_step = traj.readline().split(' ')[2]
-        box_length_tokens = traj.readline().split(' ')
-        box_length_x = box_length_tokens[2]
-        box_length_y = box_length_tokens[3]
-        box_length_z = box_length_tokens[4]
-        energy_tokens = traj.readline().split(' ')
-        energy_total = energy_tokens[2]
-        energy_potential = energy_tokens[3]
-        energy_kinetic = energy_tokens[4]
-        nucleotide_strings = traj.readlines()
-        traj.seek(0)
-        file_string = traj.read()
-
-    nucleotides = []
-    for line in nucleotide_strings:
-        tokens = line.split(' ')
-        nucleotide = utils.Nucleotide(pos_x=tokens[0], pos_y=tokens[1], pos_z=tokens[2],
-                                      base_v_x=tokens[3], base_v_y=tokens[4], base_v_z=tokens[5],
-                                      normal_v_x=tokens[6], normal_v_y=tokens[7], normal_v_z=tokens[8],
-                                      velocity_x=tokens[9], velocity_y=tokens[10], velocity_z=tokens[11],
-                                      ang_velocity_x=tokens[12], ang_velocity_y=tokens[13], ang_velocity_z=tokens[14])
-        nucleotides.append(nucleotide)
-
-    config = utils.Configuration(time_step, box_length_x, box_length_y, box_length_z,
-                                 energy_total, energy_potential, energy_kinetic, nucleotides)
-    loaded = Trajectory(file_string, config)
-    return loaded
+    return __load_given_trajectory('generated.dat')
 
 
 def load_trajectory_last():
-    with open(os.path.join('..', 'last_conf.dat'), 'r') as traj:
+    return __load_given_trajectory('last_conf.dat')
+
+
+def __load_given_trajectory(file_name):
+    with open(os.path.join('..', file_name), 'r') as traj:
         time_step = traj.readline().split(' ')[2]
         box_length_tokens = traj.readline().split(' ')
         box_length_x = box_length_tokens[2]
