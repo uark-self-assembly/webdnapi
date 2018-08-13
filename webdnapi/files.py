@@ -1,4 +1,5 @@
 import jsonpickle
+import os.path
 from webdnapi import utils
 
 
@@ -12,7 +13,7 @@ class ProjectSettings:
 
 
 def load_project_settings():
-    with open('project.json', 'r') as settings:
+    with open(os.path.join('..', 'project.json'), 'r') as settings:
         file_string = settings.read()
 
     loaded = jsonpickle.decode(file_string)
@@ -20,18 +21,27 @@ def load_project_settings():
     return project_settings
 
 
+class Input:
+    def __init__(self, file_string, settings):
+        self.file_string = file_string
+        self.settings = settings
+
+
 def load_input():
     input_settings = {}
-    with open('input.txt', 'r') as input:
-        for line in input:
+    with open(os.path.join('..', 'input.txt'), 'r') as input_file:
+        file_string = input_file.read()
+        input_file.seek(0)
+        for line in input_file:
             (key, val) = line.split(' = ')
             input_settings[key] = val
 
-    return input_settings
+    loaded = Input(file_string, input_settings)
+    return loaded
 
 
 def load_log():
-    with open('log.dat', 'r') as log:
+    with open(os.path.join('..', 'log.dat'), 'r') as log:
         file_string = log.read()
 
     return file_string
@@ -44,7 +54,7 @@ class StdOut:
 
 
 def load_stdout():
-    with open('stdout.log', 'r') as stdout:
+    with open(os.path.join('..', 'stdout.log'), 'r') as stdout:
         file_string = stdout.read()
 
     output_file = StdOut(file_string)
@@ -58,7 +68,7 @@ class Sequence:
 
 
 def load_sequence():
-    with open('sequence.txt', 'r') as sequence:
+    with open(os.path.join('..', 'sequence.txt'), 'r') as sequence:
         file_string = sequence.read()
 
     loaded = Sequence(file_string)
@@ -74,7 +84,7 @@ class Topology:
 
 
 def load_topology():
-    with open('generated.top', 'r') as top:
+    with open(os.path.join('..', 'generated.top'), 'r') as top:
         first_line = top.readline()
         top.seek(0)
         file_string = top.read()
@@ -94,7 +104,7 @@ class Energy:
 
 
 def load_energy():
-    with open('energy.dat', 'r') as energy:
+    with open(os.path.join('..', 'energy.dat'), 'r') as energy:
         file_string = energy.read()
 
     time_steps = file_string.splitlines()
@@ -109,7 +119,7 @@ class ExternalForces:
 
 
 def load_external_forces():
-    with open('external_forces.dat', 'r') as ext_forces:
+    with open(os.path.join('..', 'external_forces.dat'), 'r') as ext_forces:
         file_string = ext_forces.read()
 
     lines = file_string.splitlines()
@@ -130,4 +140,72 @@ def load_external_forces():
         i += 1
 
     loaded = ExternalForces(file_string, forces)
+    return loaded
+
+
+class Trajectory:
+    def __init__(self, file_string, configuration):
+        self.file_string = file_string
+        self.configuration = configuration
+
+
+def load_trajectory_initial():
+    with open(os.path.join('..', 'generated.dat'), 'r') as traj:
+        time_step = traj.readline().split(' ')[2]
+        box_length_tokens = traj.readline().split(' ')
+        box_length_x = box_length_tokens[2]
+        box_length_y = box_length_tokens[3]
+        box_length_z = box_length_tokens[4]
+        energy_tokens = traj.readline().split(' ')
+        energy_total = energy_tokens[2]
+        energy_potential = energy_tokens[3]
+        energy_kinetic = energy_tokens[4]
+        nucleotide_strings = traj.readlines()
+        traj.seek(0)
+        file_string = traj.read()
+
+    nucleotides = []
+    for line in nucleotide_strings:
+        tokens = line.split(' ')
+        nucleotide = utils.Nucleotide(pos_x=tokens[0], pos_y=tokens[1], pos_z=tokens[2],
+                                      base_v_x=tokens[3], base_v_y=tokens[4], base_v_z=tokens[5],
+                                      normal_v_x=tokens[6], normal_v_y=tokens[7], normal_v_z=tokens[8],
+                                      velocity_x=tokens[9], velocity_y=tokens[10], velocity_z=tokens[11],
+                                      ang_velocity_x=tokens[12], ang_velocity_y=tokens[13], ang_velocity_z=tokens[14])
+        nucleotides.append(nucleotide)
+
+    config = utils.Configuration(time_step, box_length_x, box_length_y, box_length_z,
+                                 energy_total, energy_potential, energy_kinetic, nucleotides)
+    loaded = Trajectory(file_string, config)
+    return loaded
+
+
+def load_trajectory_last():
+    with open(os.path.join('..', 'last_conf.dat'), 'r') as traj:
+        time_step = traj.readline().split(' ')[2]
+        box_length_tokens = traj.readline().split(' ')
+        box_length_x = box_length_tokens[2]
+        box_length_y = box_length_tokens[3]
+        box_length_z = box_length_tokens[4]
+        energy_tokens = traj.readline().split(' ')
+        energy_total = energy_tokens[2]
+        energy_potential = energy_tokens[3]
+        energy_kinetic = energy_tokens[4]
+        nucleotide_strings = traj.readlines()
+        traj.seek(0)
+        file_string = traj.read()
+
+    nucleotides = []
+    for line in nucleotide_strings:
+        tokens = line.split(' ')
+        nucleotide = utils.Nucleotide(pos_x=tokens[0], pos_y=tokens[1], pos_z=tokens[2],
+                                      base_v_x=tokens[3], base_v_y=tokens[4], base_v_z=tokens[5],
+                                      normal_v_x=tokens[6], normal_v_y=tokens[7], normal_v_z=tokens[8],
+                                      velocity_x=tokens[9], velocity_y=tokens[10], velocity_z=tokens[11],
+                                      ang_velocity_x=tokens[12], ang_velocity_y=tokens[13], ang_velocity_z=tokens[14])
+        nucleotides.append(nucleotide)
+
+    config = utils.Configuration(time_step, box_length_x, box_length_y, box_length_z,
+                                 energy_total, energy_potential, energy_kinetic, nucleotides)
+    loaded = Trajectory(file_string, config)
     return loaded
